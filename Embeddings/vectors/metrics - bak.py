@@ -128,12 +128,12 @@ def WMean(distance=cosine): #factory
         if len(wordsA) < 1 or len(wordsB) < 1:
             return 0.0
 
-        vecA = copy.deepcopy(w2v_model.get_vector(wordsA[0])) * (np.log(N_DOCUMENTS) - np.log(docfreqs[w2v_model.model.wv.vocab[wordsA[0]].index]))
-        vecB = copy.deepcopy(w2v_model.get_vector(wordsB[0])) * (np.log(N_DOCUMENTS) - np.log(docfreqs[w2v_model.model.wv.vocab[wordsB[0]].index]))
+        vecA = copy.deepcopy(w2v_model.get_vector(wordsA[0])) * (np.log(N_DOCUMENTS) - np.log(docfreqs[w2v_model.model.vocab[wordsA[0]].index]))
+        vecB = copy.deepcopy(w2v_model.get_vector(wordsB[0])) * (np.log(N_DOCUMENTS) - np.log(docfreqs[w2v_model.model.vocab[wordsB[0]].index]))
         for i in xrange(1, len(wordsA)):
-            vecA += w2v_model.get_vector(wordsA[i]) * (np.log(N_DOCUMENTS) - np.log(docfreqs[w2v_model.model.wv.vocab[wordsA[i]].index]))
+            vecA += w2v_model.get_vector(wordsA[i]) * (np.log(N_DOCUMENTS) - np.log(docfreqs[w2v_model.model.vocab[wordsA[i]].index]))
         for i in xrange(1, len(wordsB)):
-            vecB += w2v_model.get_vector(wordsB[i]) * (np.log(N_DOCUMENTS) - np.log(docfreqs[w2v_model.model.wv.vocab[wordsB[i]].index]))
+            vecB += w2v_model.get_vector(wordsB[i]) * (np.log(N_DOCUMENTS) - np.log(docfreqs[w2v_model.model.vocab[wordsB[i]].index]))
 
         vecA /= len(wordsA)
         vecB /= len(wordsB)
@@ -1273,18 +1273,21 @@ def variance(data):
 
 
 
-if __name__ == '__main__':
-    f = open('/root/wiki_model_w2v_model_2017_09_13/docfreq.npy')
-    docfreqs = np.load(f)
-    f.close()
-    
-    w = w2v()
-    w.load_minimal('/root/wiki_model_w2v_model_2017_09_13/w2v_model_2017_09_13_minimal/w2v_model_2017_09_13_minimal')
-    
-    a = 'in the middle of the century bc an independent'
-    b = 'some banks offer alternative debit card facilities to their customers'
-    
-    wmean_inner = WMean()
-    print wmean_inner(a, b, w, docfreqs)
 
-    print("eiei")
+if __name__ == '__main__':
+    # f = open('../data/docfreq.npy')
+    # docfreqs = np.load(f)
+    # f.close()
+    #
+    # w = w2v()
+    # w.load_minimal('../data/minimal')
+    #
+    # a = 'in the middle of the 0rd century bc an independent'
+    # b = 'some banks offer alternative debit card facilities to their customers'
+    #
+    # print maxCosine(a, b, w, docfreqs)
+    B = np.linspace(0.4, 1.0, num=101)
+    A = np.linspace(0.0, 0.6, num=101)
+    error, split = optimal_error_rate(A, B)
+    print error
+    print split
